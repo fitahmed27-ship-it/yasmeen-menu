@@ -214,35 +214,28 @@ input:focus, textarea:focus, select:focus{ outline:none; border-color:var(--bran
 
     <!-- META -->
     <details class="panel" open>
-      <summary style="cursor:pointer; font-weight:700; color:var(--accent); font-family:'Lalezar','Tajawal',sans-serif; font-weight:800; font-size:1.1rem">معلومات عامة وفوتر</summary>
+      <summary style="cursor:pointer; font-weight:700; color:var(--accent); font-family:'Lalezar','Tajawal',sans-serif; font-weight:800; font-size:1.1rem">أوقات العمل والحجوزات</summary>
       <div style="margin-top:.9rem">
-        <div class="field-grid">
-          <div><label>اسم المكان</label><input id="m_brand" type="text" /></div>
-          <div><label>عنوان المنيو</label><input id="m_menuLabel" type="text" /></div>
-        </div>
-        <div><label>الشعار / الوصف</label><input id="m_tagline" type="text" /></div>
-        <hr style="border:0;border-top:1px dashed var(--hair); margin:1rem 0" />
-        <div class="field-grid">
-          <div><label>عنوان أوقات العمل</label><input id="m_hoursTitle" type="text" /></div>
-          <div><label>نص أوقات العمل</label><input id="m_hoursText" type="text" /></div>
-        </div>
+        <div><label>نص أوقات العمل</label><input id="m_hoursText" type="text" /></div>
         <div class="field-grid">
           <div><label>عنوان الحجوزات</label><input id="m_reservationsTitle" type="text" /></div>
           <div><label>نص الحجوزات</label><input id="m_reservationsText" type="text" /></div>
         </div>
-        <div class="field-grid">
-          <div><label>الهاتف 1</label><input id="m_phone1" type="text" dir="ltr" /></div>
-          <div><label>الهاتف 2</label><input id="m_phone2" type="text" dir="ltr" /></div>
-        </div>
-        <div class="field-grid">
-          <div><label>إنستغرام (بدون @)</label><input id="m_instagram" type="text" dir="ltr" /></div>
-          <div><label>عنوان الموقع</label><input id="m_addressTitle" type="text" /></div>
-        </div>
-        <div style="margin-bottom:.8rem"><label>العنوان</label><input id="m_addressText" type="text" /></div>
-        <div class="field-grid three">
-          <div><label>سطر السنة</label><input id="m_year" type="text" /></div>
-          <div><label>سطر الأسعار</label><input id="m_priceNote" type="text" /></div>
-          <div><label>الكريديت</label><input id="m_credit" type="text" dir="ltr" /></div>
+        <div style="margin-bottom:.8rem"><label>الهاتف 1</label><input id="m_phone1" type="text" dir="ltr" /></div>
+        <!-- Locked fields: kept hidden so their saved values pass through unchanged -->
+        <div hidden>
+          <input id="m_brand" type="text" />
+          <input id="m_menuLabel" type="text" />
+          <input id="m_tagline" type="text" />
+          <input id="m_hoursTitle" type="text" />
+          <input id="m_phone2" type="text" />
+          <input id="m_instagram" type="text" />
+          <input id="m_addressTitle" type="text" />
+          <input id="m_addressText" type="text" />
+          <input id="m_year" type="text" />
+          <input id="m_priceNote" type="text" />
+          <input id="m_credit" type="text" />
+          <input id="m_creditNum" type="text" />
         </div>
       </div>
     </details>
