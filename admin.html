@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#905635" />
+<title>لوحة التحكم · الياسمين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+/* Al Yasmeen brand tokens (same as index.html) */
+:root{
+  --brand-brown:#905635; --brand-tan:#b8794a; --brand-deep:#4a2614;
+  --brand-cream:#ead3c3; --brand-ink:#2e1a10;
+  --bg-0:#f1e2d2; --bg-1:#fbf4ec;
+  --accent:#905635; --accent-soft:#b8794a;
+  --ink:#2e1a10; --muted:#7a6252;
+  --hair:rgba(144,86,53,.24);
+  --panel:#fbf4ec;
+  --panel-border:rgba(144,86,53,.16);
+  --field:#fffdf9;
+  --danger:#b3412c;
+  --ok:#4a2614;
+}
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
+body{
+  font-family:"Tajawal",system-ui,sans-serif; color:var(--ink);
+  background:var(--bg-0);
+  min-height:100vh; padding:1rem;
+}
+h1,h2,h3{ font-family:"Lalezar","Tajawal",sans-serif; font-weight:400; color:var(--ink); }
+.wrap{ max-width:920px; margin-inline:auto; }
+.brand{ display:flex; align-items:center; gap:.6rem; margin-bottom:1rem; color:var(--ink); }
+.brand{ background:var(--brand-brown); color:var(--brand-cream); border-radius:18px; padding:.7rem 1rem; }
+.brand .logo{ width:64px; height:auto; aspect-ratio:1.24; fill:currentColor; display:block; }
+.brand .pill{ color:var(--brand-cream) !important; border-color:rgba(234,211,195,.4) !important; }
+.brand .btn{ color:var(--brand-cream); border-color:rgba(234,211,195,.4); }
+.brand .btn:hover{ color:#fff; border-color:#fff; }
+.brand .pill{ margin-inline-start:auto; padding:.25rem .7rem; border:1px solid var(--panel-border); border-radius:999px; color:var(--accent); font-size:.85rem; }
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--panel-border);
+  border-radius:18px;
+  padding:1.4rem; margin-bottom:1rem;
+  box-shadow:0 10px 24px -20px rgba(66,40,24,.4);
+}
+label{ display:block; font-size:.85rem; color:var(--muted); margin-bottom:.3rem; }
+input[type=text], input[type=password], textarea, select{
+  width:100%; background:var(--field); color:var(--ink);
+  border:1px solid var(--panel-border); border-radius:10px;
+  padding:.55rem .7rem; font-family:inherit; font-size:.95rem;
+  font-variant-numeric:tabular-nums;
+}
+textarea{ resize:vertical; min-height:60px; }
+input:focus, textarea:focus, select:focus{ outline:none; border-color:var(--brand-deep); box-shadow:0 0 0 3px rgba(74,38,20,.18); }
+
+.btn{
+  min-height:40px; justify-content:center;
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.55rem 1rem; border-radius:999px; cursor:pointer;
+  border:1px solid var(--panel-border); background:transparent;
+  color:var(--ink); font-family:inherit; font-size:.92rem; font-weight:500;
+  transition:all .2s ease;
+}
+.btn:hover{ border-color:var(--accent); color:var(--accent); }
+.btn.primary{ background:var(--brand-deep); color:var(--brand-cream); border-color:var(--brand-deep); font-weight:700; }
+.btn.primary:hover{ background:#4c553e; color:#fff; }
+.btn.danger{ color:var(--danger); border-color:rgba(179,65,44,.35); }
+.btn.danger:hover{ background:rgba(179,65,44,.08); border-color:var(--danger); }
+.btn.ghost{ color:var(--muted); border-style:dashed; }
+.btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+.toolbar{ display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; }
+.toolbar .spacer{ flex:1; }
+.muted{ color:var(--muted); }
+.kbd{ padding:1px 6px; border:1px solid var(--panel-border); border-radius:4px; font-size:.75rem; color:var(--muted); }
+
+/* login screen */
+.login-card{ max-width:360px; margin:6vh auto 0; }
+.login-card h1{ font-size:1.7rem; color:var(--accent); margin-bottom:.4rem; }
+.login-card .logo{ width:150px; height:auto; aspect-ratio:1.24; fill:var(--brand-brown); display:block; margin:0 auto 1rem; }
+.login-card p{ color:var(--muted); margin-bottom:1rem; font-size:.9rem; }
+.login-card .row{ display:flex; gap:.5rem; }
+.login-error{ color:var(--danger); font-size:.85rem; margin-top:.5rem; min-height:1.2em; }
+
+/* sections list */
+.section-card{ border:1px solid var(--panel-border); border-top:4px solid var(--brand-tan); border-radius:14px; padding:1rem; margin-bottom:.9rem; background:var(--panel); }
+.section-card:nth-child(4n+2){ border-top-color:var(--brand-deep); }
+.section-card:nth-child(4n+3){ border-top-color:var(--brand-brown); }
+.section-card:nth-child(4n+4){ border-top-color:var(--brand-ink); }
+.section-head{
+  display:grid; grid-template-columns: 28px 1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.6rem;
+}
+.section-head .grip{ color:var(--muted); cursor:grab; user-select:none; text-align:center; }
+.section-head .type-tag{
+  color:var(--brand-cream); background:var(--brand-deep);
+  border:0; border-radius:8px; padding:.25rem .55rem; font-size:.78rem; font-weight:600;
+  text-align:center; letter-spacing:.05em;
+}
+.section-head .type-tag{ justify-self:start; }
+.section-head .actions{ display:flex; gap:.3rem; }
+.section-head .actions .btn{ padding:.35rem .7rem; font-size:.8rem; }
+
+.field-grid{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin-bottom:.6rem; }
+.field-grid.three{ grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width:640px){
+  .field-grid, .field-grid.three{ grid-template-columns: 1fr; }
+  .section-head{ grid-template-columns: 28px 1fr auto; }
+  .section-head .type-tag{ display:none; }
+}
+
+.group-card{
+  border:1px solid var(--panel-border); border-radius:12px;
+  padding:.85rem; margin-bottom:.6rem; background:var(--bg-0);
+}
+.group-head{ display:flex; gap:.5rem; align-items:center; margin-bottom:.5rem; }
+.group-head input{ flex:1; }
+@media (max-width:640px){ .group-head{ flex-wrap:wrap; } .group-head input{ flex:1 1 100%; } }
+
+.item-row{
+  display:grid; grid-template-columns: 18px 1fr 110px 32px 32px 32px; gap:.4rem;
+  align-items:start; margin-bottom:.35rem;
+  padding:.5rem; border:1px dashed var(--hair); border-radius:10px;
+  background:var(--panel);
+}
+.item-row .grip{ color:var(--muted); text-align:center; padding-top:.35rem; cursor:grab; }
+.item-row .name-cell input{ margin-bottom:.3rem; }
+.item-row .name-cell textarea{ font-size:.85rem; }
+.item-row .price-cell input{ text-align:left; direction:ltr; }
+.item-row .icon-btn{
+  width:32px; height:32px; padding:0; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:8px; font-size:1rem;
+}
+@media (max-width:640px){
+  .item-row{ grid-template-columns: 1fr 110px; gap:.4rem; }
+  .item-row .grip{ display:none; }
+  .item-row .actions-cell{ grid-column: 1 / -1; display:flex; gap:.3rem; justify-content:flex-end; }
+  .item-row .icon-btn{ width:auto; padding:.35rem .7rem; }
+}
+
+/* status bar */
+.statusbar{
+  position:sticky; bottom:0; z-index:10;
+  background:var(--panel); border:1px solid var(--panel-border); border-radius:14px;
+  padding:.7rem 1rem; margin-top:1rem;
+  display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;
+  box-shadow:0 -8px 24px -16px rgba(66,40,24,.35);
+}
+.statusbar .info{ flex:1; min-width:180px; color:var(--muted); font-size:.85rem; }
+.statusbar .info .ok{ color:var(--ok); }
+.statusbar .info .warn{ color:var(--brand-tan); }
+.statusbar .info .err{ color:var(--danger); }
+
+.dot-saved{ display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ok); margin-inline-end:.4rem; }
+.dot-dirty{ display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--brand-tan); margin-inline-end:.4rem; }
+
+/* json modal */
+.modal-bg{
+  position:fixed; inset:0; z-index:100; display:none;
+  background:rgba(33,33,32,.6); align-items:center; justify-content:center; padding:1rem;
+}
+.modal-bg.open{ display:flex; }
+.modal{
+  width:100%; max-width:780px; max-height:90vh;
+  background:var(--bg-1); border:1px solid var(--panel-border); border-radius:18px;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.modal header{ padding:1rem; border-bottom:1px solid var(--panel-border); display:flex; align-items:center; }
+.modal header h2{ font-size:1.2rem; flex:1; color:var(--accent); }
+.modal .body{ padding:1rem; overflow:auto; flex:1; }
+.modal .body textarea{ width:100%; min-height:50vh; font-family:ui-monospace,"Cascadia Code",Consolas,monospace; font-size:.85rem; direction:ltr; text-align:left; }
+.modal footer{ padding:.8rem 1rem; border-top:1px solid var(--panel-border); display:flex; gap:.5rem; justify-content:flex-end; }
+
+.toast{
+  position:fixed; bottom:1rem; left:50%; transform:translateX(-50%) translateY(40px);
+  background:var(--brand-ink); color:#fff; padding:.7rem 1.1rem;
+  border:1px solid var(--panel-border); border-radius:999px;
+  font-size:.9rem; opacity:0; transition:all .3s ease; z-index:200; pointer-events:none;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+.toast.ok{ border-color:var(--ok); color:var(--ok); }
+.toast.err{ border-color:var(--danger); color:var(--danger); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="yasmeen-logo" viewBox="56 51 1260 1017"><path fill="currentColor" fill-rule="evenodd" d="M507 1058c-1-1-2-3-2-4c0-2-11-3-12 0c-1 1-1 3-2 4c-1 2-4 2-6 1c-1-1-1-1 1-5c1-2 2-5 2-5c0-1 1-3 2-5c1-1 2-3 2-5c0-3 5-10 7-11c3 0 5 2 5 5c0 1 1 5 2 7c2 3 3 6 3 7c0 1 1 2 1 3c3 2 4 11 1 11c-1 0-3-1-4-3zM528 1058c-5-5-4-6 7-4c5 0 5 0 5-2c0-3-1-4-5-5c-2-1-4-2-5-3c-3-2-3-3-3-7c0-6 1-8 6-9c3-1 10-1 12 1c1 2 1 4 0 6c-2 1-3 1-5 0c-4-2-6-2-6 2c0 1 1 2 2 3c3 0 10 5 11 6c1 1 1 3 1 5c0 4-1 5-3 7c-3 3-4 3-9 3c-5 0-6 0-8-3zM564 1060c-1-2-1-31 0-32c2-1 4 1 9 9c3 6 6 9 7 9c1 0 3-4 5-8c4-8 8-11 10-8c1 1 1 7 1 14c0 10 0 13-1 14c-3 2-4 0-4-7c0-3 0-6-1-6c-1 0-6 7-6 8c0 2-3 5-5 5c-1 0-7-8-7-10c0 0-1-1-1-2c-2-1-3 2-2 7c0 6-2 10-5 7zM708 1059c-2-3-15-16-15-15c-1 0-1 3-1 6c0 6-1 8-5 8c-2 0-2 0-2-11c0-6 0-12 0-13c0-3 0-4 2-4c3 0 3 0 13 10c2 3 5 5 5 5c1-1 1-3 1-8c0-7 2-9 5-9c1 0 2 2 2 14c0 16-2 23-5 17zM829 1059c-6-3-6-5-3-7c2-1 3-1 7 1c3 2 4 2 5 1c3-2 2-4-4-8c-4-2-7-4-7-6c-2-4-2-5 1-9c2-3 3-3 9-3c8 0 9 1 7 6c-1 2-2 2-3 2c-2-1-4-1-5-2c-3 0-3 0-3 2c0 2 2 3 8 6c2 1 4 3 5 5c2 3 2 4 1 7c-1 3-7 7-11 7c-2 0-5-1-7-2zM916 1059c-1-1-2-3-3-4c-2-2-3-3-6-3c-4 0-6 1-8 5c-2 3-6 4-7 2c0-1 2-6 4-11c2-5 5-11 7-14c1-3 3-5 4-5c1 1 4 4 7 13c2 4 4 8 5 10c2 5 2 6 1 8c-2 1-2 1-4-1zM938 1057c-2-3-4-5-4-6c-1-22-1-22 2-23c1 0 3 0 3 1c1 0 1 5 1 11c1 12 2 14 6 14c5 0 6-2 6-15l0-11l3 0c3 0 4 1 4 6c1 4 1 10 1 14c-1 6-1 7-5 10c-2 2-4 3-8 3c-4 0-5 0-9-4zM349 1059c-1-2 5-17 9-24c4-8 6-8 11 1c1 5 3 9 4 11c0 1 1 3 2 4c0 1 1 3 2 5c0 4 0 4-3 4c-1 0-3-1-4-3c-2-4-3-5-8-5c-4 0-5 1-6 3c-2 4-6 7-7 4zM394 1059c-2-2-2-3-3-15c0-11 0-13 2-14c3-4 8-1 6 4c0 1 0 6 0 11c0 9 0 10 7 10c4 0 8 2 7 4c-1 2-17 1-19 0zM460 1057c0-2-1-5-1-6c0-2-1-4-1-5c-1-1-3-3-3-5c-1-2-3-4-4-6c-3-3-2-7 1-7c2 0 3 1 5 4c2 5 4 8 5 8c1 0 2-2 4-5c3-6 7-9 9-7c1 2 1 3-2 6c-7 12-8 15-8 18c0 4-1 8-3 8c0 0-1-1-2-3zM614 1059c-2-2-2-3-2-15c0-10 0-14 1-15c2-1 17-2 19-1c0 1 1 2 1 3c0 3-2 4-6 3c-3 0-4 0-6 2l-2 2l2 2c1 1 3 2 5 2c4 0 4 2-1 5c-4 1-5 2-5 5c0 2 1 3 5 3c5 0 8 1 7 3c-1 3-15 3-18 1zM650 1058c-2-1-2-2-2-15l0-15l9 0c7-1 9 0 11 1c2 1 3 2 0 4c-1 2-2 2-5 2c-3-1-4-1-6 1c-2 1-2 2-1 3c1 1 3 2 5 2c4 0 6 1 6 4c0 1-1 2-4 2c-6 0-6 0-7 3c-2 4 0 5 6 5c6 0 9 2 8 4c-2 2-17 1-20-1zM792 1059c-2-1-2-2-3-16c0-16-1-15 12-15c9 0 11 0 11 3c0 3-2 3-7 3c-3 0-6 0-7 1c-2 1-1 4 2 5c8 1 9 1 9 3c0 3-3 4-8 4c-3 0-4 0-4 2c-1 5 0 6 5 6c4-1 5-1 7 1c2 2 2 2 1 3c-2 1-15 1-18 0zM992 1059c-1-1-2-3-4-6c-4-6-6-5-6 1c0 4-1 5-3 5c-4 0-5-1-4-16l0-14l3-1c2 0 6-1 8-1c4 1 6 1 8 4c3 4 4 8 1 13c-2 2-3 4-3 4c0 1 2 3 4 5c1 3 3 5 3 6c0 1-6 1-7 0zM1011 1058c0-1 1-4 2-6c2-3 3-6 3-6c0-1 2-5 4-9c5-11 7-11 10-4c1 3 3 7 4 9c1 3 2 5 2 6c0 1 1 3 2 4c3 5 3 7-1 7c-2 0-4-1-5-3c-2-4-4-4-9-4c-2 1-4 2-5 5c-2 3-6 4-7 1zM1056 1057c-2-3-2-26 0-27c1-2 5 1 6 4c1 1 3 4 5 5c2 1 4 3 5 5c2 5 3 2 3-5c0-8 1-11 3-11c1 0 2 1 2 2c1 2 1 24 0 29c0 2-3 1-5-2c-1-2-3-4-4-5c-1 0-3-2-4-4c-2-3-6-6-6-4c0 1 0 5 0 8c0 6-1 8-2 8c-1 0-2-1-3-3zM754 1058c-2-1-2-4-2-14c-1-7 0-14 0-15c1-2 1-2 8-2c8 1 10 2 13 8c1 3 0 8-3 9c-1 1-1 6 0 7c2 1 4 4 4 6c0 2-1 2-3 2c-3 0-3-1-5-3c-1-4-6-8-7-7c-1 0-1 2-1 5c1 5-1 6-4 4zM868 1058c0-1-1-6-1-12c0-11 0-12-5-12c-3 0-4-3-2-5c2-2 20-2 22 0c1 2 1 2-1 4c-1 1-3 2-4 2c-3 0-3 2-4 13c0 9-1 11-2 11c-1 0-2 0-3-1zM1106 1058c-2-1-2-4-2-13c-1-6-1-11-1-11c0 0-1 0-3 0c-2 0-4-1-4-2c-4-3-1-5 11-4c6 0 11 0 11 1c2 1 0 4-3 6c-3 1-4 2-4 5c-1 3-1 8-1 12c1 6 1 7-1 7c-1 0-2-1-3-1zM221 1047c-1-2-1-4 1-5c1-2 7-2 48-2l46 0l1 3c1 5 2 5-48 5c-35 0-47 0-48-1zM1149 1046c-1-1-1-2 0-4l1-2l45 0l45 0l0 4l0 4l-45 0c-39 0-45 0-46-2zM364 1044c0-2-1-3-2-3c-1 0-1 1-1 3c0 1 0 2 1 2c1 0 2-1 2-2zM500 1044c-1-3-3-4-3-1c0 2 1 3 2 3c1 0 1-1 1-2zM908 1043c-1-2-3-3-3 0c0 1 1 2 2 2c1 0 1-1 1-2zM766 1040c2-1 2-2 1-3c-1-2-5-4-7-3c-2 2-1 5 1 6c3 2 3 2 5 0zM990 1038c0-4-7-5-9-2c-1 3 2 5 5 5c3 0 4-1 4-3zM187 984c-3-1-4-2-14-10c-3-2-6-4-6-4c-1 0-3-1-4-2c-1-2-3-3-3-3c-1 0-3-1-4-2c-1-1-7-8-14-15c-7-6-14-14-16-16c-2-3-4-5-4-5c-1 0-19-26-19-28c0 0-1-1-1-2c-2-1-12-22-16-31c-5-12-11-29-11-32c0-1 0-2-1-3c-1-1-5-18-6-29c-1-5-2-13-3-18c-3-18 0-81 5-102c0-2 2-8 3-13c2-13 4-20 5-25c1-2 2-5 2-6c0-1 1-4 1-6c1-2 3-8 5-12c1-5 3-11 4-12c0-2 2-6 3-9c8-21 7-20 23-52c10-21 16-31 19-37c2-3 4-6 5-8c1-1 3-5 5-8c1-2 4-7 6-10c1-2 5-8 7-12c3-4 6-9 8-12c1-2 4-7 7-10c2-3 4-5 4-6c0 0 1-2 3-4c1-2 5-7 8-11c7-11 8-12 18-25c21-27 31-39 33-42c1-1 6-8 11-13c5-6 9-11 9-12c1 0 2-5 3-9c1-5 2-10 2-11c1-2 1-3 0-3c-2 0-9 3-13 7c-2 1-5 4-7 5c-2 1-5 4-7 5c-3 3-3 3-6 2c-3-2-3-2-6-1c-1 1-2 3-3 4c-2 3-9 11-11 11c-1 0-2-2-3-3c0-2-1-4-2-4c0 0-2 2-3 5c-3 5-10 13-12 13c0 0-2-1-3-3l-2-3l-1 4c-4 8-11 15-15 15c-1 0-1-5 1-10c0-1 0-2-1-2c-2 0-5 5-6 9c-2 4-11 16-13 16c-2 1-3 0-3-3c0-6-3-7-4-1c-1 2-2 4-3 5c0 1-1 2-1 3c0 3-7 11-9 11c-1 0-2-1-3-3c-1-4-3-4-3-1c-1 1-3 7-6 12c-5 10-7 12-10 10c-3-3-5-2-5 4c0 1-1 3-1 5c-1 1-2 3-3 5c-2 5-4 7-7 4c-3-3-4-3-5 1c0 2-1 5-2 7c-1 2-2 4-2 4c0 2-5 15-7 16c-2 2-4 2-4 0c-2-4-4-22-5-34c0-10 0-14 1-18c2-6 2-12 1-13c-2-1 0-15 4-22c0-1 2-4 4-8c2-4 4-8 6-10c2-3 2-4 1-7c-1-2-1-2 0-4c1-1 2-2 2-2c0-1 2-4 5-8c6-7 13-14 19-18c2-1 3-2 2-4c0-4 11-15 21-20c2-1 6-4 8-6c6-6 12-9 26-12c2-1 5-2 7-3c4-4 11-6 21-7c6 0 13-1 15-2c2 0 8-1 11-1c11 0 31 3 36 6c1 1 3 1 4 0c2-1-9-7-20-11c-11-4-13-5-11-7c1-2 1-2 0-3c-1-1-11-2-20-2c-5 0-6-2-3-5c3-4 3-5-2-5c-8 2-23 3-24 3c-3-1-2-3 1-6c3-4 3-4 1-5c0 0-2 0-4 1c-2 1-4 2-5 2c-2 0-4 1-6 2c-3 1-11 1-12-1c0 0 1-2 2-4c4-3 2-5-2-3c-2 1-5 2-7 3c-2 0-4 2-6 2c-4 2-6 0-7-3c0-1 0-2-1-2c0 0-2 2-5 3c-7 5-10 5-11 2c0-3-3-4-5-2c0 1-2 2-4 3c-3 1-5 2-6 3c-11 6-15 9-16 8c-2-1-1-4 2-9c2-2 4-6 4-8c4-8 19-25 27-29c3-2 5-3 5-5c0-1 1-3 4-4c2 0 5-2 6-2c1-1 5-2 7-3c4-1 6-2 8-4l3-3l14-1c9 0 14-1 16-2c2-1 7-1 17 2c3 1 8 2 11 2c4 0 7 1 12 4c3 2 7 4 9 5c1 1 2 2 2 2c1 0 3 1 6 2c4 2 9 6 16 13c5 6 10 11 10 11c0 0 1 1 2 1c1 1 2-2 0-3c-1 0-2-2-3-3c-1-2-5-6-8-9c-5-5-6-6-6-9c0-2 0-4-2-5c-2-2-3-4-8-11c-1-2-2-5-2-6c0-2-1-4-3-6c-4-3-8-9-11-15c-1-3-4-5-7-8c-6-3-8-7-8-10c0-1 2-2 7-2c11 0 26 4 32 10c3 2 3 2 5 1c2-1 3-1 5 1c2 1 4 4 5 7c3 5 5 6 7 4c3-3 14 14 15 23c1 4 3 5 3 3c1-1 2-4 3-8c1-4 2-8 2-9c0-1 1-3 3-4c2-2 3-3 3-5c0-4 4-17 5-19c2-2 4-1 5 1c2 3 3 2 6-6c0-4 2-9 4-13c3-6 5-8 6-5c1 3 3 2 4-1c1-1 2-4 3-5c0-1 1-3 1-4c0-1 4-6 9-11c9-10 10-11 12-5c0 2 0 3 1 3c0 0 2-2 3-4c7-11 13-14 20-13c3 0 5 0 7-2c4-3 14-7 17-7c1 0 3 1 4 2c1 1 1 1 3-1c2-2 4-2 7-2c4 1 5 1 19 0c13 0 25 2 36 7c1 0 4 2 6 2c3 1 4 3 4 4c0 2-2 4-6 5c-3 0-5 1-6 2c-2 0-4 1-6 1c-5 1-14 6-18 9c-1 1-4 2-8 3c-7 1-8 1-6 4c0 1 1 3 1 3c0 2-4 5-9 6c-5 0-6 2-7 6c0 3-1 4-4 7c-6 6-9 8-14 10c-5 1-5 4-1 5c4 2 4 4 0 7c-3 3-12 10-19 14c-1 1-3 3-3 3c0 1 1 1 3 2c2 0 3 2 3 3c0 1-12 13-18 18c-3 2-2 4 2 4c5 0 5 2 0 7c-16 17-17 17-13 17c1 0 2 0 2 1c1 1-2 7-5 12c-3 4-4 8-2 8c1 0 4-2 7-5c3-3 7-7 9-8c3-2 5-4 6-6c5-4 12-8 15-8c2-1 7-3 11-6c3-2 6-4 7-4c1 0 2-1 3-1c2-1 4-2 7-2c2 0 6-1 11-3c9-4 15-5 26-5c5 0 15 0 23 0l13-1l3 4c3 3 5 3 11 4c7 1 11 2 23 7c4 2 5 3 5 5c0 2 1 3 4 3c2 1 6 2 7 3c2 1 5 3 7 4c2 1 2 2 2 5c0 3 0 4 6 7c9 5 12 8 12 11c1 2 3 6 5 9c8 9 14 22 15 31c1 7 1 10-2 10c-1 0-12-7-16-11c-1 0-6-3-10-6c-9-5-10-5-10-3c-3 3-5 5-7 4c-1 0-2-1-2-1c0-1-2-2-4-4c-3-1-5-4-7-5c-3-3-3-3-5 1c0 2-1 4-3 4c-1 0-12-6-18-10c-3-2-4 0-2 3c0 2 1 4 0 4c0 1-8-2-10-4c0-1-3-2-4-3c-2 0-4-1-6-2c-2-2-5-2-5 0c0 1 1 3 1 5c2 2 2 3 1 4c-2 1-3 1-10-2c-10-4-11-4-11 0l0 3l-8 0c-4 0-8-1-9-2c-3-1-7-1-7 0c0 1 0 2 1 3c1 2 1 2 0 3c-2 0-13-1-22-3l-4 0l1 2c1 2 2 3 2 4c-1 0-5 1-9 1c-5 1-11 2-14 3c-3 0-7 1-8 1c-2 0-5 1-7 2c-2 1-6 2-9 3c-4 0-6 0-5 1c0 1 3 1 6 0c6 0 33 0 40 0c3 1 8 1 10 1c4 0 6 1 7 2c0 2 2 2 6 3c2 0 6 0 8 1c5 1 8 2 12 3c2 1 5 2 7 4c2 2 6 4 8 5c5 1 11 4 18 8c4 3 5 4 5 6c0 3 0 4 4 5c2 0 6 2 8 3c5 3 16 11 16 13c1 1 2 3 3 4c1 1 2 2 2 3c0 2 3 6 8 10c7 7 9 10 12 15c4 10 7 17 7 22c1 2 2 6 3 7c1 2 2 4 2 5c0 1 1 4 2 7c2 6 3 11 0 15c-1 4-1 4 0 8c2 4 2 4 0 8c-1 4-1 4 0 8c2 2 2 4 2 8c-1 4-1 6-4 8l-3 3l0 7c1 7 1 8-1 9c-1 1-3 4-4 8c-5 11-9 17-10 17c-1 0-2-2-3-7c0-4-1-8-1-9c-1 0-2-6-2-11c-2-10-4-18-6-18c0 0-1 1-2 3c-1 2-2 3-4 1c0-1-1-4-1-8c-2-13-3-21-3-22c-1-2-3-1-4 3c0 2-1 4-2 5c-2 2-4-2-8-19c-3-11-4-11-8-4c-1 3-3 5-3 5c-2 0-4-6-4-10c0-1-1-4-2-6c-2-4-2-4-4-2c0 1-1 2-1 2c0 2-4 1-5-1c-2-3-7-15-7-18c-1-4-3-4-3 0c0 1-1 3-2 5c-2 1-2 1-4-1c-2-2-6-7-8-13l-1-3l-3 2c-4 5-9 1-14-12c-1-3-3-6-3-6c-1 1-2 2-2 4c-1 2-1 3-2 3c-2 0-9-9-11-13c0-3-2-4-4-2c-2 3-6 2-8-1c-9-11-8-11-12-10c-4 0-5 0-7-3c-3-4-13-11-17-13c-1-1-3-3-4-3c-2-2-5-2-5-1c0 1 1 3 3 4c2 0 3 1 3 2c0 0 3 3 6 7c7 7 22 28 22 30c0 1 1 2 1 3c1 1 4 5 6 10c4 8 5 10 4 13c0 3 0 6 2 8c1 3 3 8 4 12c2 7 2 8 1 10c-3 2-2 6 0 14c1 4 2 9 2 10c0 3-1 4-4 4c-2 0-2 1-2 3c1 8 1 11 0 15c-1 2-2 6-4 7c-2 2-2 4-2 6c1 3 1 15 0 18c-1 2-4 3-7 1c-2-1-2-1-2 6c0 7 0 8-3 12c-2 3-4 6-5 7c-1 1-1 1-3 0c-2-1-4-1-4-1c-2 1-4 7-4 12c0 3-1 4-3 6c-2 3-3 3-4 2c-1-1-2-2-3-2c-2 0-7 6-7 8c0 1-7 8-8 8c-1 0-6 2-15 6c-6 3-9 3-9 0c0-2 7-16 13-28c3-6 4-7 2-9c-2-2-2-9-1-11c1-1 2-2 2-4c1-1 2-4 3-6c2-4 1-7-2-5c-2 1-2 1-3 0c0-3 3-14 5-18c3-4 2-5 0-8c-4-3-4-8-1-16c2-7 2-8-1-6c-5 3-5 0-2-11c2-8 2-11-2-12c-1-1-1-2-1-8c0-11 0-11-3-11c-3 0-3 0-4-3c0-2 1-6 1-8c2-6 3-14 1-15c0-1-1 0-2 0c-3 2-4 0-4-9c0-6-1-8-2-11c-1-1-2-6-3-9c-1-7-2-12-5-21c-2-6-4-7-5-2c-1 6-7 16-12 22c-2 2-3 3-4 1c-2-2-4-1-7 4c-1 2-3 5-4 6c-2 3-22 33-40 60c-1 2-2 4-2 5c0 0-1 1-1 2c-2 1-7 10-14 22c-1 2-5 9-9 15c-10 17-10 18-17 30c-7 14-16 30-22 44c-2 5-5 12-6 14c-6 12-10 22-10 24c0 1-1 3-2 4c-1 1-2 5-3 8c-2 7-4 12-5 16c-3 5-5 12-7 18c0 2-1 6-2 8c-2 4-7 27-9 36c-1 2-2 6-2 8c-1 3-1 8-2 12c-1 3-2 10-3 15c-4 27-4 92 0 119c1 5 2 11 3 14c1 8 4 21 6 28c6 23 11 37 15 45c1 1 2 4 2 6c1 1 2 3 3 4c0 1 1 2 1 3c0 1 2 4 4 7c2 3 4 6 4 6c0 1 7 13 10 17c7 11 13 18 18 23c3 3 6 6 6 7c0 1-3 1-7 0zM417 931c-5-5-10-11-12-13c-2-2-4-5-4-6c0-1 4-6 11-13c5-6 11-12 12-13c3-4 5-3 17 10c7 6 12 11 13 11c0 0 3-2 5-5c10-11 19-18 21-18c2 0 6 3 15 13c14 13 15 15 11 19c-4 3-6 5-15 14c-5 6-10 10-11 10c-2 0-14-11-16-13c-2-3-10-11-11-11c0 0-6 5-12 12c-8 9-11 12-13 12c-2 0-5-2-11-9zM1046 933c-8-9-17-18-18-18c-1 0-1-1-1-3c0-2 2-5 12-15c9-9 14-13 15-13c2 0 6 4 13 11c8 8 11 11 13 11c2 0 5-3 12-10c6-6 10-11 10-11c0-2 3-2 6 0c5 3 26 25 26 27c0 1-1 3-3 5c-2 1-4 4-5 5c-1 1-3 2-4 3c-1 1-4 5-8 8c-8 9-9 9-16 1c-6-8-16-18-18-18c-2 0-10 8-19 18c-3 4-5 6-7 6c-1 0-4-2-8-7zM250 928c-10-1-29-9-39-16c-14-10-19-18-27-34c-8-15-8-16-8-21c-1-2-2-9-2-14c-5-27 6-69 24-93c8-10 10-13 13-15c1-1 5-4 8-8c6-6 8-7 12-6c3 1 3 5-3 12c-2 3-4 6-4 6c0 1-1 2-2 3c-1 2-4 8-11 24c-1 1-2 5-3 8c0 2-2 7-2 11c-3 9-2 43 0 47c1 1 2 4 2 6c2 5 8 16 12 21c6 7 11 11 22 16c15 7 38 10 54 6c4-1 9-2 10-2c2 0 6-2 9-3c3-2 6-4 7-4c2 0 12-7 16-12c7-7 10-12 14-22c3-9 3-9 3-24c-1-15-2-27-5-39c0-4-2-8-2-11c-1-2-2-7-4-10c-3-6-3-6-2-9c1-1 3-3 5-4c3-2 4-3 15-13c11-10 12-10 15-9c2 1 4 7 4 12c0 2 1 5 1 8c1 2 2 9 3 15c1 5 1 12 2 15c0 3 1 11 1 17c0 11 0 13 2 16c4 5 5 5 30 6c29 0 29 0 35-6l5-4l0-17c-1-16-1-18-3-26c-3-8-3-9-2-11c1-1 3-3 5-3c2-1 3-2 4-3c1-1 2-2 3-3c2 0 6-4 16-13c3-4 5-4 7 0c1 2 2 6 2 36c1 35 1 37 5 43c5 6 7 7 27 7c20 0 23-1 27-4c4-4 8-11 9-14c0-2 1-4 1-6c1-1 2-3 2-5c1-2 2-5 3-7c1-1 2-3 2-4c0-5 23-33 27-33c1 0 2-1 3-1c2-2 13-6 18-6c5 0 15 4 17 6c1 1 2 2 3 2c2 0 8 7 11 12c2 3 3 6 4 7c3 5 8 17 9 22c1 3 2 8 3 11c1 3 2 6 2 7c0 1 2 3 4 6c6 7 8 7 40 7l26 0l5-5l4-5l0-8c-1-6-1-10-3-13c-2-6-2-9 3-10c2 0 8-4 19-12c2-1 4-2 5-3c2-2 4-2 6-1c0 1 1 11 1 25c0 27 0 28 6 31c2 0 8 1 14 1c9 0 11 0 14-2c6-4 6-5 6-13c0-4 0-9-1-11c0-1-2-5-2-7l-2-5l4-4c2-1 4-3 5-3c1 0 8-6 14-11c4-4 10-5 10-3c0 3 1 11 2 29c0 19 0 20 3 23c4 5 9 7 18 8c8 0 18-2 20-5c2-2 2-18 0-27c-1-4-3-10-4-13c0-3-2-7-3-9c-5-5-4-6 5-11c3-2 8-6 11-9c3-3 6-6 7-6c0 0 2-2 3-4c1-2 3-3 4-3c3 1 6 7 7 13c0 3 1 8 2 10c1 6 3 35 2 51c0 15-4 32-9 38c-7 10-21 19-28 19c-2 0-6 0-10 1c-15 2-34-3-42-11c-2-2-4-4-5-4c0 0-3 2-5 5c-3 2-7 5-10 6c-7 4-22 6-28 4c-2 0-6-1-9-2c-5-1-7-2-14-8c-6-5-7-5-12 0c-8 7-14 9-31 10c-12 1-18 1-27 0c-20-2-27-4-32-10c-1-2-3-3-4-3c-1 0-4 3-6 6c-3 3-8 6-10 8c-2 1-5 3-6 4c-2 1-5 1-17 1c-14 0-16 0-21-2c-10-5-19-12-24-17c-3-5-5-5-6-3c-5 6-10 9-16 12c-15 7-44 6-58-1c-2-1-6-4-9-7c-3-3-6-6-7-6c-1 0-4 2-6 5c-9 10-21 13-44 13c-19 0-30-1-33-4c-1 0-4-1-6-1c-3 0-4 0-4 4c-3 9-9 20-21 36c-3 4-12 13-13 13c-1 0-2 1-3 3c0 1-2 3-3 3c-9 5-22 12-24 12c-1 1-3 2-4 3c-1 0-3 1-4 1c-1 0-5 1-8 2c-6 2-9 2-25 3c-11 0-22 0-26-1zM1265 883c-1-2-1-4 1-9c3-8 4-14 5-26c1-13 1-109 0-144c-1-14-1-31-2-37c0-12-2-24-4-27c0-1-1-2-1-3c0 0 4-4 8-7c5-4 10-9 12-10c2-2 6-6 9-8c4-2 7-6 9-7c3-3 4-4 5-2c1 0 1 49 1 108c0 89 0 108-1 111c-1 2-2 5-2 6c-1 4-5 13-9 22c-5 11-13 22-25 31c-5 4-6 5-6 2zM1028 854c-21-2-28-5-35-13c-7-7-8-7-9-12c-1-2-2-5-3-5c0-1-1-4-1-8c-1-4-2-9-3-12c-1-5-1-18-1-75l0-69l-3-9c-2-5-4-10-4-11c1-1 3-3 5-4c2-1 6-5 10-8c3-3 7-5 7-5c0 0 2-2 4-3c2-2 4-4 5-4c0 0 3-2 6-4c2-2 5-4 5-4c4 0 4-3 4 96c0 75 0 95 1 96c1 1 4 3 6 5l4 3l30 0c20 0 31 0 33-1c2-1 6-3 8-5l3-4l0-17c-1-13-1-18-2-21c-3-8-4-10 0-14c1-2 4-4 5-5c2-1 8-5 14-9c6-4 11-8 12-8c3 0 4 8 4 46l0 27l3 3c1 2 4 4 6 6c4 2 5 2 26 2c22 0 23 0 27-2c2-1 5-4 6-6c2-3 2-4 2-32c0-18 0-31-1-32c0-2-1-19-2-43c0-44 0-40-6-53c-1-3-1-3 1-5c3-2 26-20 31-26c1-1 4-3 7-4c3-2 5-2 6-1c0 1 1 2 0 3c0 1 0 45 0 98c0 108 1 100-7 115c-5 11-6 11-13 19c-8 8-14 12-24 13c-3 1-8 1-12 2c-15 2-42 0-51-4c-7-3-13-7-15-11c-1-1-2-3-3-3c-1 0-4 2-8 5c-3 3-9 7-12 9c-6 2-8 3-19 4c-15 1-33 1-47 0zM632 818c4-3 5-7 4-15c0-4-2-8-2-9c-1-1-2-3-2-4c0-2-6-11-10-14c-5-4-11-7-14-7c-2 0-6 1-9 3c-6 2-7 4-10 9c-2 3-5 8-6 11l-1 6l3 4c3 4 10 10 12 10c0 0 2 1 3 2c0 1 2 2 3 2c2 0 5 1 7 2c7 3 19 3 22 0zM267 681c-9-9-15-15-15-16c0-4 28-33 31-33c1 0 4 3 7 6c3 4 9 10 14 15c5 5 9 10 9 11c0 2-29 32-30 32c-1 0-8-7-16-15zM976 627c-1 0-3-1-4-3c-3-2-8-5-12-7c-1-1-4-2-6-3c-5-2-44-2-59 0c-8 2-13 2-24 1c-8 0-14-1-15-1c0-1-1-1-2-1c-4 0-21-6-23-8c-1 0-2-1-3-1c-1 0-4-2-8-4c-3-2-6-4-6-4c-1 0-3-2-6-4c-3-1-6-3-7-4c-2 0-6-3-10-6c-15-10-35-18-44-18c-5 0-7-1-7-3c0-2 4-6 8-8c2-1 6-4 9-6c3-2 6-4 6-4c1 0 2-1 3-1c1-1 6-4 12-6c6-3 12-6 13-7c2 0 4-1 5-1c1 0 3-1 5-1c1-1 3-2 5-2c2-1 7-2 10-3c7-2 10-2 30-2c18 0 24 0 28 1c4 1 8 2 10 2c6 1 29 14 36 20c10 7 28 26 28 28c0 1 0 2 1 2c1 1 7 9 9 13c4 10 7 13 23 27c6 5 6 8 2 11c-5 4-5 4-7 3zM991 613c-1-1-2-7-3-13c-1-7-3-17-5-23c-2-6-3-13-4-14c-5-20-18-51-26-60c-1-1-2-4-2-7l-1-5l-7-3c-10-4-17-6-22-7c-4-2-11-5-17-8c-17-10-28-23-34-41c-2-6-2-8-2-21c0-12 0-15 1-20c2-4 2-5 1-6c-1-1-1 0-2 2c-7 12-20 24-33 30c-10 5-19 7-33 7c-13 0-17-1-35-9c-27-11-31-12-44-12c-9-1-10-2-4-10c2-4 4-7 5-9c0-1 2-3 3-5c0-2 2-6 4-8c1-3 2-5 2-6c0-1 1-3 7-16c1-2 7-13 11-19c3-3 9-10 13-13c5-3 16-8 25-11c12-4 36-2 47 4c3 1 8 1 8 0c0 0-2-2-5-5c-7-4-15-12-15-13c0-1-1-2-2-3c-3-3-10-18-11-25c-2-7-2-12-1-21c3-10 11-27 16-33c3-4 13-25 15-31c1-3 2-4 4-5c2 0 2-1 19 11c5 4 10 7 11 7c1 0 3 1 4 2c2 1 4 2 5 3c2 0 4 1 5 2c1 1 2 2 3 2c1 0 9 6 16 13c7 7 12 14 12 19c1 2 2 5 3 6c3 6 2 35-1 39c-2 2-2 5 0 6c0 0 1-1 2-2c0-1 2-5 4-7c2-2 4-6 5-7c1-2 3-3 4-3c0 0 2-1 2-2c1-1 3-3 5-4c1 0 4-2 7-3c5-4 18-6 29-6c11 0 25 1 28 3c1 1 3 2 4 2c1 0 3 1 4 2c1 0 5 3 9 5c22 11 28 14 32 15c6 2 6 4 1 9c-2 2-4 4-4 5c0 0-1 2-2 4c-3 3-4 5-9 15c-2 4-4 8-5 10c0 1-2 5-4 8c-5 10-16 23-22 24c-1 1-2 2-3 3c-1 0-2 1-3 1c-1 0-3 1-6 2c-8 4-23 6-34 3c-4-1-6-1-7 0c-1 1-1 1 7 6c5 4 19 17 19 19c0 1 1 3 3 5c2 2 3 4 3 5c0 0 1 4 3 7c1 3 2 7 2 9c0 2 0 4 1 5c0 1 0 7 0 15c-1 9-2 13-3 16c-1 1-2 4-2 5c0 1-1 3-2 5c0 2-2 7-4 13c-2 5-3 10-4 11c-1 0-2 4-2 9c-1 7-1 8 1 14c5 13 14 37 15 43c0 2 2 8 3 12c2 5 3 11 3 12c1 2 2 3 2 3c2 0 6-7 8-15c2-7 4-26 4-34c0-10 6-37 10-47c1-2 2-4 2-4c0-1 8-17 11-23c3-5 8-11 16-19c11-10 14-13 29-23c7-5 28-17 38-22c7-3 9-4 11-7c3-2 6-3 7 0c0 0-1 7-2 13c-1 7-2 14-2 17c0 2 0 5-1 7c-1 2-2 9-3 15c-1 14-4 30-6 35c-1 3-2 6-2 7c0 1-1 3-1 5c-1 1-2 2-2 3c0 1-9 20-12 25c-4 5-18 19-24 24c-8 6-13 9-22 14c-13 7-17 9-19 12c-2 1-3 2-4 2c-1 0-9 6-17 14c-5 6-10 15-11 22c-1 4-4 10-6 11c0 0-3 2-6 4c-6 5-7 5-9 2zM870 562c0-1-1-1-3-1c-1 0-2 0-2 1c0 1 1 1 3 1c2 0 3 0 2-1zM1035 537c0-3-1-4-2-1c-1 2-1 4 0 4c1 0 2-2 2-3zM1039 530c1-2 1-3 0-3c-2 0-3 2-3 4c0 2 3 1 3-1zM1044 522c1-4-2-4-3 1c-1 1-1 2 0 2c1 0 2-1 3-3zM1048 515c0-1 1-2 2-3c1-1 2-3 2-3c0-1 1-3 2-3c1-1 2-3 2-4c0-1 2-3 3-6c4-5 5-8 3-9c0 0-2 2-4 5c-1 3-3 7-4 8c-1 1-2 2-2 3c0 1-1 3-2 3c-1 1-2 3-2 3c0 1-1 2-2 4c-3 2-2 6 1 4c0-1 1-2 1-2zM1069 480c2-4 1-5-2-1c-3 3-4 4-2 5c1 1 2 0 4-4zM915 376c0-2-1-3-1-5c-1-1-2-2-2-3c0-1-1-3-2-4c-2-3-3-7-1-9c1 0 1-2 1-4c0-2 1-3 6-3c8 0 9-1 3-4c-3-2-4-6-1-8c1-1 1-3 1-4c-1-3-1-3 1-3c1 0 3-1 4-2c2-2 2-2 1-3c-2 0-3 0-5 1c-3 2-3 2-5 0c-3-1-8-1-9 0c0 1 1 3 1 5c2 3 2 11 1 15c0 3-8 7-13 7c-5 0-8-2-12-6c-3-2-3-3-3-10c0-9 0-9 8-13c4-2 6-2 10 0c3 1 4 1 8-2c1-2 2-3 2-6c0-1 1-4 2-5c2-3 2-8 0-7c0 0-1 2-3 4c-1 2-3 5-4 7c-2 3-4 6-5 6c0 0-1-2-2-4c-1-3-1-3-4-2c-2 1-2 1-3 0c-1-1-1-3-1-4c0-3-2-6-3-6c-1 0-1 3-1 7c0 6 0 8-1 9c-1 0-2 2-3 3c-1 2-2 2-5 2c-3-1-6-2-7-3c-3-2-6-2-7 0c0 0 1 1 2 2c3 0 12 9 12 11c0 0-1 1-2 2c-1 1-2 2-2 3c0 2 0 3-4 4c-2 1-4 2-4 2c0 1 6 2 8 1c3-2 5-1 5 2c0 2 1 3 2 3c4 0 5 1 4 5c-1 1-2 3-2 4c0 1-1 3-2 4c0 1-1 3-1 4c1 1 1 1 3-1c1-3 3-4 7-9c2-3 5-2 5 1c0 4 3 5 5 2c1-2 3-3 3-3c2 0 9 10 12 16c2 4 3 4 3 1zM882 294c-1-1-1-1-1 2c0 4 1 5 2 1c0-1 0-3-1-3z"/></symbol></svg>
+
+<div class="wrap" id="appRoot">
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <section id="loginView" class="panel login-card">
+    <svg class="logo" role="img" aria-label="الياسمين"><use href="#yasmeen-logo"/></svg>
+    <h1>لوحة التحكم</h1>
+    <p>الرجاء إدخال كلمة المرور للدخول.</p>
+    <label for="pw">كلمة المرور</label>
+    <div class="row">
+      <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••" />
+      <button class="btn primary" id="loginBtn">دخول</button>
+    </div>
+    <div class="login-error" id="loginErr"></div>
+  </section>
+
+  <!-- ===== EDITOR SCREEN ===== -->
+  <div id="editorView" style="display:none">
+
+    <div class="brand">
+      <svg class="logo" role="img" aria-label="الياسمين"><use href="#yasmeen-logo"/></svg>
+      <span class="pill">لوحة التحكم</span>
+      <button class="btn" id="logoutBtn" style="margin-inline-start:.5rem">خروج</button>
+    </div>
+
+    <!-- META -->
+    <details class="panel" open>
+      <summary style="cursor:pointer; font-weight:700; color:var(--accent); font-family:'Lalezar','Tajawal',sans-serif; font-weight:800; font-size:1.1rem">معلومات عامة وفوتر</summary>
+      <div style="margin-top:.9rem">
+        <div class="field-grid">
+          <div><label>اسم المكان</label><input id="m_brand" type="text" /></div>
+          <div><label>عنوان المنيو</label><input id="m_menuLabel" type="text" /></div>
+        </div>
+        <div><label>الشعار / الوصف</label><input id="m_tagline" type="text" /></div>
+        <hr style="border:0;border-top:1px dashed var(--hair); margin:1rem 0" />
+        <div class="field-grid">
+          <div><label>عنوان أوقات العمل</label><input id="m_hoursTitle" type="text" /></div>
+          <div><label>نص أوقات العمل</label><input id="m_hoursText" type="text" /></div>
+        </div>
+        <div class="field-grid">
+          <div><label>عنوان الحجوزات</label><input id="m_reservationsTitle" type="text" /></div>
+          <div><label>نص الحجوزات</label><input id="m_reservationsText" type="text" /></div>
+        </div>
+        <div class="field-grid">
+          <div><label>الهاتف 1</label><input id="m_phone1" type="text" dir="ltr" /></div>
+          <div><label>الهاتف 2</label><input id="m_phone2" type="text" dir="ltr" /></div>
+        </div>
+        <div class="field-grid">
+          <div><label>إنستغرام (بدون @)</label><input id="m_instagram" type="text" dir="ltr" /></div>
+          <div><label>عنوان الموقع</label><input id="m_addressTitle" type="text" /></div>
+        </div>
+        <div style="margin-bottom:.8rem"><label>العنوان</label><input id="m_addressText" type="text" /></div>
+        <div class="field-grid three">
+          <div><label>سطر السنة</label><input id="m_year" type="text" /></div>
+          <div><label>سطر الأسعار</label><input id="m_priceNote" type="text" /></div>
+          <div><label>الكريديت</label><input id="m_credit" type="text" dir="ltr" /></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- OFFER -->
+    <details class="panel" id="offerPanel">
+      <summary style="cursor:pointer; font-weight:700; color:var(--accent); font-family:'Lalezar','Tajawal',sans-serif; font-weight:800; font-size:1.1rem">
+        العرض المنبثق <span id="offerStatusPill" class="muted" style="font-size:.78rem; font-family:'Tajawal',sans-serif; font-weight:400; margin-inline-start:.5rem"></span>
+      </summary>
+      <div style="margin-top:.9rem">
+        <div class="field-grid">
+          <div>
+            <label>تفعيل العرض</label>
+            <label class="switch" style="display:inline-flex;align-items:center;gap:.5rem;cursor:pointer">
+              <input id="o_enabled" type="checkbox" />
+              <span class="muted">عند التفعيل، سيظهر العرض للزوار عند فتح المنيو.</span>
+            </label>
+          </div>
+          <div>
+            <label>إظهار مرة واحدة لكل زائر</label>
+            <label style="display:inline-flex;align-items:center;gap:.5rem;cursor:pointer">
+              <input id="o_showOnce" type="checkbox" />
+              <span class="muted">يتذكر متصفح الزائر أنه شاهد العرض.</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div><label>العنوان</label><input id="o_title" type="text" placeholder="مثال: اكتشف عروض رمضان" /></div>
+          <div><label>السطر الفرعي</label><input id="o_subtitle" type="text" placeholder="مثال: خصم ٢٠٪ على كل المشروبات الباردة" /></div>
+        </div>
+
+        <div>
+          <label>رابط عند الضغط (اختياري)</label>
+          <input id="o_ctaHref" type="text" dir="ltr" placeholder="https://wa.me/964..." />
+          <span class="muted" style="font-size:.78rem">إن وُضع رابط تصبح البطاقة قابلة للضغط وتفتح الرابط.</span>
+        </div>
+
+        <label>صورة العرض</label>
+        <div id="offerImageBox" style="display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; padding:.7rem; border:1px dashed var(--hair); border-radius:12px; background:var(--bg-0)">
+          <div id="offerImagePreview" style="
+            width:120px; height:120px; border-radius:10px;
+            background:var(--field) center/cover no-repeat;
+            border:1px solid var(--panel-border); flex:0 0 auto;
+            display:flex; align-items:center; justify-content:center;
+            color:var(--muted); font-size:.78rem; text-align:center;">لا توجد صورة</div>
+          <div style="display:flex; flex-direction:column; gap:.4rem; flex:1; min-width:200px">
+            <input type="file" id="offerFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" />
+            <button class="btn" type="button" id="offerUploadBtn">رفع صورة جديدة</button>
+            <button class="btn ghost" type="button" id="offerRemoveBtn">إزالة الصورة</button>
+            <span class="muted" style="font-size:.78rem">JPG / PNG / WEBP / GIF · حد أقصى 4 ميجا</span>
+            <span id="offerUploadStatus" class="muted" style="font-size:.8rem"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:.9rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap">
+          <button class="btn" type="button" id="offerBumpVersionBtn">إعادة عرض للجميع</button>
+          <span class="muted" style="font-size:.8rem">يجبر إعادة الظهور حتى لمن شاهدوا العرض سابقاً.</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- TOP TOOLBAR -->
+    <div class="panel">
+      <div class="toolbar">
+        <button class="btn" id="addSectionBtn">+ قسم جديد</button>
+        <button class="btn ghost" id="addPauseBtn">+ فاصل (اقتباس)</button>
+        <span class="spacer"></span>
+        <button class="btn" id="reloadBtn">تحديث من الخادم</button>
+      </div>
+    </div>
+
+    <!-- BLOCKS LIST -->
+    <div id="blocksList"></div>
+
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <div class="info" id="statusInfo"><span class="dot-saved"></span>جاهز</div>
+      <button class="btn" id="previewBtn">معاينة</button>
+      <button class="btn primary" id="saveBtn">حفظ التغييرات</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- JSON modal -->
+<div class="modal-bg" id="jsonModal">
+  <div class="modal">
+    <header>
+      <h2 id="jsonTitle">JSON</h2>
+      <button class="btn" data-close-modal>إغلاق</button>
+    </header>
+    <div class="body">
+      <textarea id="jsonText" spellcheck="false"></textarea>
+    </div>
+    <footer>
+      <button class="btn" data-close-modal>إلغاء</button>
+      <button class="btn primary" id="jsonApplyBtn" style="display:none">تطبيق</button>
+    </footer>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ADMIN APP STATE  (kept simple, single mutable object)
+   ============================================================ */
+var state = {
+  pass: sessionStorage.getItem("yasmeen_pass") || "",
+  data: null,            // current menu in memory
+  serverData: null,      // last loaded from server (for dirty check)
+  saving: false,
+};
+
+/* ===== utilities ===== */
+function $(sel, root){ return (root || document).querySelector(sel); }
+function $$(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+function el(html){
+  var t = document.createElement("template");
+  t.innerHTML = html.trim();
+  return t.content.firstChild;
+}
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function eq(a, b){ return JSON.stringify(a) === JSON.stringify(b); }
+function toast(msg, kind){
+  var t = $("#toast");
+  t.className = "toast show " + (kind || "");
+  t.textContent = msg;
+  clearTimeout(toast._h);
+  toast._h = setTimeout(function(){ t.className = "toast"; }, 2400);
+}
+function setStatus(text, kind){
+  var dot = kind === "dirty" ? '<span class="dot-dirty"></span>' : '<span class="dot-saved"></span>';
+  $("#statusInfo").innerHTML = dot + (text || "");
+}
+function markDirty(){
+  var dirty = !eq(state.data, state.serverData);
+  setStatus(dirty ? "تغييرات غير محفوظة" : "محفوظ", dirty ? "dirty" : "saved");
+}
+
+/* ===== auth + io ===== */
+function api(path, opts){
+  opts = opts || {};
+  opts.headers = Object.assign({ "Content-Type":"application/json", "x-admin-pass": state.pass }, opts.headers || {});
+  return fetch(path, opts).then(function(r){
+    if (r.status === 401){ logout(); throw new Error("unauthorized"); }
+    return r.json().then(function(j){ return { ok:r.ok, status:r.status, body:j }; });
+  });
+}
+
+function tryLogin(){
+  var pw = $("#pw").value.trim();
+  $("#loginErr").textContent = "";
+  if (!pw){ $("#loginErr").textContent = "أدخل كلمة المرور"; return; }
+  fetch("/api/login", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ password: pw })
+  }).then(function(r){ return r.json().then(function(j){ return { ok:r.ok, status:r.status, body:j }; }); })
+    .then(function(res){
+      if (res.status === 401){ $("#loginErr").textContent = "كلمة مرور غير صحيحة"; return; }
+      if (!res.ok){ $("#loginErr").textContent = serverHint(); return; }
+      state.pass = pw;
+      sessionStorage.setItem("yasmeen_pass", pw);
+      enterEditor();
+    })
+    .catch(function(){ $("#loginErr").textContent = serverHint(); });
+}
+
+/* explain WHY the server can't be reached */
+function serverHint(){
+  if (location.protocol === "file:")
+    return "افتح لوحة التحكم عبر الخادم وليس بالنقر على الملف: شغّل start-server.bat ثم افتح http://localhost:8080/admin.html";
+  return "الخادم الحالي لا يدعم لوحة التحكم. أغلق كل نوافذ الخادم القديمة (الشاشة السوداء) ثم شغّل start-server.bat من جديد.";
+}
+
+function logout(){
+  state.pass = "";
+  sessionStorage.removeItem("yasmeen_pass");
+  $("#editorView").style.display = "none";
+  $("#loginView").style.display  = "";
+  $("#pw").value = "";
+}
+
+function enterEditor(){
+  $("#loginView").style.display  = "none";
+  $("#editorView").style.display = "";
+  loadMenu();
+}
+
+function loadMenu(){
+  setStatus("جاري التحميل…");
+  fetch("/api/menu", { cache:"no-store" })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      state.data = data;
+      state.serverData = clone(data);
+      renderMeta();
+      renderBlocks();
+      setStatus("تم التحميل", "saved");
+    })
+    .catch(function(e){ setStatus("فشل التحميل", "dirty"); console.error(e); });
+}
+
+function saveMenu(){
+  if (state.saving) return;
+  state.saving = true;
+  setStatus("جاري الحفظ…");
+  api("/api/menu", { method:"POST", body: JSON.stringify({ menu: state.data }) })
+    .then(function(res){
+      state.saving = false;
+      if (!res.ok){
+        toast("فشل الحفظ: " + (res.body && res.body.error || res.status), "err");
+        setStatus("فشل الحفظ", "dirty");
+        return;
+      }
+      state.serverData = clone(state.data);
+      toast("تم الحفظ بنجاح ✓", "ok");
+      setStatus("محفوظ · " + new Date().toLocaleTimeString("ar"), "saved");
+    })
+    .catch(function(e){
+      state.saving = false;
+      toast("فشل الحفظ", "err");
+      setStatus("فشل الحفظ", "dirty");
+      console.error(e);
+    });
+}
+
+/* ===== meta render ===== */
+function renderMeta(){
+  var m = state.data.meta || (state.data.meta = {});
+  var f = m.footer || (m.footer = {});
+  var bind = {
+    m_brand: m, m_tagline: m, m_menuLabel: m,
+    m_hoursTitle:f, m_hoursText:f, m_reservationsTitle:f, m_reservationsText:f,
+    m_year:f, m_priceNote:f, m_credit:f,
+    m_instagram:f, m_addressTitle:f, m_addressText:f
+  };
+  Object.keys(bind).forEach(function(id){
+    var key = id.replace("m_", "");
+    var input = document.getElementById(id);
+    var src = bind[id];
+    input.value = src[key] != null ? src[key] : "";
+    input.oninput = function(){ src[key] = input.value; markDirty(); };
+  });
+  var phones = (f.phones && f.phones.slice()) || ["",""];
+  $("#m_phone1").value = phones[0] || "";
+  $("#m_phone2").value = phones[1] || "";
+  $("#m_phone1").oninput = $("#m_phone2").oninput = function(){
+    f.phones = [ $("#m_phone1").value, $("#m_phone2").value ].filter(function(s){ return s.length; });
+    markDirty();
+  };
+  // creditNum lives next to credit
+  if (!document.getElementById("m_creditNum")){
+    var creditField = $("#m_credit").parentNode;
+    var wrap = document.createElement("div");
+    wrap.innerHTML = '<label>رقم الكريديت</label><input id="m_creditNum" type="text" dir="ltr" />';
+    creditField.parentNode.appendChild(wrap);
+  }
+  var cn = document.getElementById("m_creditNum");
+  cn.value = f.creditNum || "";
+  cn.oninput = function(){ f.creditNum = cn.value; markDirty(); };
+
+  renderOffer();
+}
+
+/* ===== offer editor ===== */
+function renderOffer(){
+  var m = state.data.meta || (state.data.meta = {});
+  var o = m.offer || (m.offer = { enabled:false, version:1, image:"", title:"", subtitle:"", ctaLabel:"", ctaHref:"", showOnce:true });
+
+  function bindText(id, key){
+    var el = document.getElementById(id);
+    el.value = o[key] != null ? o[key] : "";
+    el.oninput = function(){ o[key] = el.value; markDirty(); updateOfferPill(); };
+  }
+  function bindBool(id, key){
+    var el = document.getElementById(id);
+    el.checked = !!o[key];
+    el.onchange = function(){ o[key] = el.checked; markDirty(); updateOfferPill(); };
+  }
+  bindText("o_title", "title");
+  bindText("o_subtitle", "subtitle");
+  bindText("o_ctaHref", "ctaHref");
+  bindBool("o_enabled", "enabled");
+  bindBool("o_showOnce", "showOnce");
+
+  // image preview
+  var prev = document.getElementById("offerImagePreview");
+  if (o.image){
+    prev.style.background = 'url("'+o.image+'") center/cover no-repeat var(--field)';
+    prev.textContent = "";
+  } else {
+    prev.style.background = "var(--field)";
+    prev.textContent = "لا توجد صورة";
+  }
+
+  updateOfferPill();
+}
+
+function updateOfferPill(){
+  var pill = document.getElementById("offerStatusPill");
+  if (!pill) return;
+  var o = state.data.meta && state.data.meta.offer;
+  if (!o){ pill.textContent = ""; return; }
+  pill.textContent = o.enabled ? "· مُفعّل" : "· معطّل";
+  pill.style.color = o.enabled ? "var(--ok)" : "var(--muted)";
+}
+
+function setUploadStatus(msg, kind){
+  var s = document.getElementById("offerUploadStatus");
+  if (!s) return;
+  s.textContent = msg || "";
+  s.style.color = kind === "err" ? "var(--danger)" : (kind === "ok" ? "var(--ok)" : "var(--muted)");
+}
+
+function uploadOfferImage(file){
+  if (!file) return;
+  if (file.size > 4 * 1024 * 1024){ setUploadStatus("الصورة أكبر من 4 ميجا", "err"); return; }
+  setUploadStatus("جاري الرفع…");
+  var fd = new FormData();
+  fd.append("image", file);
+  fetch("/api/upload", {
+    method:"POST",
+    headers:{ "x-admin-pass": state.pass },
+    body: fd
+  }).then(function(r){ return r.json().then(function(j){ return { ok:r.ok, body:j }; }); })
+    .then(function(res){
+      if (!res.ok){ setUploadStatus(res.body && res.body.error || "فشل الرفع", "err"); return; }
+      var url = res.body.url;
+      state.data.meta.offer = state.data.meta.offer || {};
+      state.data.meta.offer.image = url;
+      // bump version so all users see the new image
+      state.data.meta.offer.version = (state.data.meta.offer.version || 1) + 1;
+      renderOffer();
+      markDirty();
+      setUploadStatus("تم الرفع · لا تنس الحفظ", "ok");
+      toast("تم رفع الصورة. اضغط حفظ التغييرات.", "ok");
+    })
+    .catch(function(){ setUploadStatus("فشل الرفع", "err"); });
+}
+
+/* ===== blocks render ===== */
+function renderBlocks(){
+  var list = $("#blocksList");
+  list.innerHTML = "";
+  (state.data.blocks || []).forEach(function(b, idx){
+    list.appendChild(b.type === "pause" ? renderPauseBlock(b, idx) : renderSectionBlock(b, idx));
+  });
+}
+
+function moveBlock(idx, dir){
+  var arr = state.data.blocks;
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= arr.length) return;
+  var [item] = arr.splice(idx, 1);
+  arr.splice(newIdx, 0, item);
+  renderBlocks();
+  markDirty();
+}
+function deleteBlock(idx){
+  if (!confirm("حذف هذا القسم؟")) return;
+  state.data.blocks.splice(idx, 1);
+  renderBlocks();
+  markDirty();
+}
+
+function renderPauseBlock(b, idx){
+  var node = el(
+    '<div class="section-card" data-idx="'+idx+'">' +
+      '<div class="section-head">' +
+        '<span class="grip">⋮⋮</span>' +
+        '<span class="type-tag">فاصل</span>' +
+        '<input type="text" placeholder="نص الفاصل (يدعم HTML بسيط)" />' +
+        '<div class="actions">' +
+          '<button class="btn" data-up>↑</button>' +
+          '<button class="btn" data-down>↓</button>' +
+          '<button class="btn danger" data-del>حذف</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+  var input = $("input", node);
+  input.value = b.text || "";
+  input.oninput = function(){ b.text = input.value; markDirty(); };
+  $("[data-up]", node).onclick = function(){ moveBlock(idx, -1); };
+  $("[data-down]", node).onclick = function(){ moveBlock(idx, +1); };
+  $("[data-del]", node).onclick = function(){ deleteBlock(idx); };
+  return node;
+}
+
+function renderSectionBlock(b, idx){
+  var node = el(
+    '<div class="section-card" data-idx="'+idx+'">' +
+      '<div class="section-head">' +
+        '<span class="grip">⋮⋮</span>' +
+        '<span class="type-tag">قسم</span>' +
+        '<input type="text" data-field="title" placeholder="عنوان القسم" />' +
+        '<div class="actions">' +
+          '<button class="btn" data-up>↑</button>' +
+          '<button class="btn" data-down>↓</button>' +
+          '<button class="btn danger" data-del>حذف</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="field-grid three">' +
+        '<div><label>اسم النافبار</label><input type="text" data-field="navLabel" /></div>' +
+        '<div><label>المعرّف (id)</label><input type="text" data-field="id" dir="ltr" /></div>' +
+        '<div><label>تنبية صغير (٠١ · …)</label><input type="text" data-field="eyebrow" /></div>' +
+      '</div>' +
+      '<div style="margin-bottom:.6rem"><label>ملاحظة القسم (اختياري)</label><input type="text" data-field="note" placeholder="مثال: حوّل الساندويش إلى وجبة بإضافة 2,000 دينار" /></div>' +
+      '<div class="groups-host"></div>' +
+      '<div style="margin-top:.4rem"><button class="btn ghost" data-add-group>+ مجموعة فرعية</button></div>' +
+    '</div>'
+  );
+  // basic fields
+  ["title","navLabel","id","eyebrow","note"].forEach(function(f){
+    var inp = $('[data-field="'+f+'"]', node);
+    inp.value = b[f] || "";
+    inp.oninput = function(){ if (f === "note" && !inp.value) delete b.note; else b[f] = inp.value; markDirty(); };
+  });
+  // actions
+  $("[data-up]", node).onclick = function(){ moveBlock(idx, -1); };
+  $("[data-down]", node).onclick = function(){ moveBlock(idx, +1); };
+  $("[data-del]", node).onclick = function(){ deleteBlock(idx); };
+
+  // groups
+  if (!Array.isArray(b.groups)) b.groups = [{ title:null, items:[] }];
+  var groupHost = $(".groups-host", node);
+  b.groups.forEach(function(g, gi){ groupHost.appendChild(renderGroup(b, g, gi)); });
+
+  $("[data-add-group]", node).onclick = function(){
+    b.groups.push({ title:"مجموعة جديدة", items:[] });
+    renderBlocks(); markDirty();
+  };
+
+  return node;
+}
+
+function renderGroup(parentBlock, g, gi){
+  var node = el(
+    '<div class="group-card" data-gi="'+gi+'">' +
+      '<div class="group-head">' +
+        '<input type="text" placeholder="اسم المجموعة (اختياري)" />' +
+        '<button class="btn ghost" data-add-item>+ صنف</button>' +
+        '<button class="btn" data-up>↑</button>' +
+        '<button class="btn" data-down>↓</button>' +
+        '<button class="btn danger" data-del>×</button>' +
+      '</div>' +
+      '<div class="items-host"></div>' +
+    '</div>'
+  );
+  var titleInput = $("input", node);
+  titleInput.value = g.title || "";
+  titleInput.oninput = function(){ g.title = titleInput.value || null; markDirty(); };
+
+  $("[data-add-item]", node).onclick = function(){
+    g.items.push({ name:"صنف جديد", price:"0" });
+    renderBlocks(); markDirty();
+  };
+  $("[data-up]", node).onclick = function(){
+    if (gi <= 0) return;
+    var [it] = parentBlock.groups.splice(gi, 1);
+    parentBlock.groups.splice(gi - 1, 0, it);
+    renderBlocks(); markDirty();
+  };
+  $("[data-down]", node).onclick = function(){
+    if (gi >= parentBlock.groups.length - 1) return;
+    var [it] = parentBlock.groups.splice(gi, 1);
+    parentBlock.groups.splice(gi + 1, 0, it);
+    renderBlocks(); markDirty();
+  };
+  $("[data-del]", node).onclick = function(){
+    if (!confirm("حذف هذه المجموعة وكل أصنافها؟")) return;
+    parentBlock.groups.splice(gi, 1);
+    renderBlocks(); markDirty();
+  };
+
+  var itemHost = $(".items-host", node);
+  if (!Array.isArray(g.items)) g.items = [];
+  g.items.forEach(function(it, ii){ itemHost.appendChild(renderItem(g, it, ii)); });
+
+  return node;
+}
+
+function renderItem(group, it, ii){
+  var node = el(
+    '<div class="item-row" data-ii="'+ii+'">' +
+      '<span class="grip">⋮</span>' +
+      '<div class="name-cell">' +
+        '<input type="text" data-f="name" placeholder="اسم الصنف" />' +
+        '<textarea data-f="desc" placeholder="الوصف (اختياري)"></textarea>' +
+      '</div>' +
+      '<div class="price-cell"><input type="text" data-f="price" placeholder="السعر" /></div>' +
+      '<button class="btn icon-btn" data-up title="أعلى">↑</button>' +
+      '<button class="btn icon-btn" data-down title="أسفل">↓</button>' +
+      '<button class="btn icon-btn danger" data-del title="حذف">×</button>' +
+    '</div>'
+  );
+  ["name","desc","price"].forEach(function(f){
+    var inp = $('[data-f="'+f+'"]', node);
+    inp.value = it[f] != null ? it[f] : "";
+    inp.oninput = function(){
+      var v = inp.value;
+      if (f === "desc" && !v) delete it.desc;
+      else it[f] = v;
+      markDirty();
+    };
+  });
+  // optional note field — show via small toggle if present
+  if (it.note != null){
+    var noteInput = el('<input type="text" placeholder="ملاحظة (note)" style="margin-top:.3rem; font-size:.85rem" />');
+    noteInput.value = it.note;
+    noteInput.oninput = function(){ it.note = noteInput.value; markDirty(); };
+    $(".name-cell", node).appendChild(noteInput);
+  }
+  $("[data-up]", node).onclick = function(){
+    if (ii <= 0) return;
+    var [x] = group.items.splice(ii, 1);
+    group.items.splice(ii - 1, 0, x);
+    renderBlocks(); markDirty();
+  };
+  $("[data-down]", node).onclick = function(){
+    if (ii >= group.items.length - 1) return;
+    var [x] = group.items.splice(ii, 1);
+    group.items.splice(ii + 1, 0, x);
+    renderBlocks(); markDirty();
+  };
+  $("[data-del]", node).onclick = function(){
+    if (!confirm("حذف هذا الصنف؟")) return;
+    group.items.splice(ii, 1);
+    renderBlocks(); markDirty();
+  };
+  return node;
+}
+
+/* ===== global toolbar actions ===== */
+function addSection(){
+  var n = (state.data.blocks || []).length + 1;
+  state.data.blocks.push({
+    type:"section",
+    id: "section-" + Date.now().toString(36),
+    navLabel: "قسم " + n,
+    title: "قسم جديد",
+    groups: [{ title:null, items:[{ name:"صنف جديد", price:"0" }] }]
+  });
+  renderBlocks(); markDirty();
+  window.scrollTo({ top: document.body.scrollHeight, behavior:"smooth" });
+}
+function addPause(){
+  state.data.blocks.push({ type:"pause", text:"اقتباس جديد" });
+  renderBlocks(); markDirty();
+  window.scrollTo({ top: document.body.scrollHeight, behavior:"smooth" });
+}
+
+/* ===== JSON modal ===== */
+function openJson(title, text, applyHandler){
+  $("#jsonTitle").textContent = title;
+  $("#jsonText").value = text;
+  $("#jsonModal").classList.add("open");
+  if (applyHandler){
+    $("#jsonApplyBtn").style.display = "";
+    $("#jsonApplyBtn").onclick = function(){
+      try {
+        var parsed = JSON.parse($("#jsonText").value);
+        applyHandler(parsed);
+        $("#jsonModal").classList.remove("open");
+      } catch (e){ toast("JSON غير صالح: " + e.message, "err"); }
+    };
+  } else {
+    $("#jsonApplyBtn").style.display = "none";
+  }
+}
+
+/* ===== bindings ===== */
+function bindEvents(){
+  $("#loginBtn").onclick = tryLogin;
+  $("#pw").addEventListener("keydown", function(e){ if (e.key === "Enter") tryLogin(); });
+  $("#logoutBtn").onclick = logout;
+  $("#saveBtn").onclick = saveMenu;
+  $("#reloadBtn").onclick = function(){
+    if (state.serverData && !eq(state.data, state.serverData)){
+      if (!confirm("لديك تغييرات غير محفوظة. متابعة وإهمالها؟")) return;
+    }
+    loadMenu();
+  };
+  $("#previewBtn").onclick = function(){ window.open("/", "_blank"); };
+  $("#addSectionBtn").onclick = addSection;
+  $("#addPauseBtn").onclick = addPause;
+  $$("[data-close-modal]").forEach(function(b){ b.onclick = function(){ $("#jsonModal").classList.remove("open"); }; });
+
+  // offer image upload
+  var fileInput = document.getElementById("offerFile");
+  document.getElementById("offerUploadBtn").onclick = function(){ fileInput.click(); };
+  fileInput.onchange = function(){
+    var f = fileInput.files && fileInput.files[0];
+    if (f) uploadOfferImage(f);
+    fileInput.value = "";
+  };
+  document.getElementById("offerRemoveBtn").onclick = function(){
+    if (!state.data.meta || !state.data.meta.offer || !state.data.meta.offer.image) return;
+    state.data.meta.offer.image = "";
+    state.data.meta.offer.version = (state.data.meta.offer.version || 1) + 1;
+    renderOffer();
+    markDirty();
+    setUploadStatus("تمت الإزالة · لا تنس الحفظ", "ok");
+  };
+  document.getElementById("offerBumpVersionBtn").onclick = function(){
+    state.data.meta.offer = state.data.meta.offer || {};
+    state.data.meta.offer.version = (state.data.meta.offer.version || 1) + 1;
+    markDirty();
+    toast("سيظهر العرض من جديد لكل الزوار بعد الحفظ.", "ok");
+  };
+
+  // Ctrl/Cmd + S to save
+  document.addEventListener("keydown", function(e){
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s"){
+      if ($("#editorView").style.display !== "none"){
+        e.preventDefault();
+        saveMenu();
+      }
+    }
+  });
+
+  // beforeunload guard
+  window.addEventListener("beforeunload", function(e){
+    if (state.serverData && !eq(state.data, state.serverData)){
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  });
+}
+
+/* ===== init ===== */
+bindEvents();
+if (state.pass){
+  // verify saved password
+  fetch("/api/login", {
+    method:"POST", headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ password: state.pass })
+  }).then(function(r){
+    if (r.ok) enterEditor();
+    else logout();
+  }).catch(function(){ logout(); });
+}
+</script>
+</body>
+</html>
