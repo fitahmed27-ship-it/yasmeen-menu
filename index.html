@@ -628,7 +628,7 @@ footer, footer *, .nav a, .nav a.active{
     /* pause text allows simple HTML from the admin (e.g. <span class="hot">) */
     var img = b.image ? '<figure><img src="' + esc(b.image) + '"' +
       (b.srcset ? ' srcset="' + esc(b.srcset) + '" sizes="(min-width:560px) 528px, 92vw"' : "") +
-      ' alt="' + esc(b.alt || "") + '" width="1000" height="659" loading="lazy" decoding="async" /></figure>' : "";
+      ' alt="' + esc(b.alt || "") + '" width="1000" height="659" loading="lazy" decoding="async" onerror="this.parentNode.hidden=true" /></figure>' : "";
     var txt = b.text ? '<p>' + b.text + '</p>' : "";
     return '<section class="pause reveal"><div class="wrap">' + img + txt + '<span class="hair"></span></div></section>';
   }

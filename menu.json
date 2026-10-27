@@ -153,9 +153,9 @@
     {
       "type": "pause",
       "text": "من بيوتنا <span class=\"hot\">أخذنا أصول الضيافة</span>",
-      "image": "images/bread-1000.webp",
-      "alt": "سفرة الياسمين: صينية مغطاة بخبز التنور",
-      "srcset": "images/bread-560.webp 560w, images/bread-1000.webp 1000w"
+      "image": "images/fish-1000.webp",
+      "alt": "سفرة الياسمين: صينية سمك مشوي",
+      "srcset": "images/fish-560.webp 560w, images/fish-1000.webp 1000w"
     },
     {
       "type": "section",
